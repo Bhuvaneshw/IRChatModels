@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "name": "composeApp: Desktop",
+            "type": "gradle",
+            "workingDir": "C:\\Users\\mgvis\\AndroidStudioProjects\\IR Chat Models",
+            "tasks": ["composeApp:run"],
+            "args": [""],
+            "initScripts": {
+                "flmapper": "ext.mapPath = { path -> path }"
+            }
+        }
+    ]
+}
