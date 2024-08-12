@@ -1,4 +1,4 @@
-package com.acutecoder.irchat
+package com.acutecoder.irchat.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
