@@ -1,5 +1,6 @@
 package com.acutecoder.irchat.ui.theme
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 
 internal val primaryLight = Color(0xFF505B92)
@@ -73,3 +74,16 @@ internal val surfaceContainerLowDark = Color(0xFF1B1B21)
 internal val surfaceContainerDark = Color(0xFF1F1F25)
 internal val surfaceContainerHighDark = Color(0xFF292A2F)
 internal val surfaceContainerHighestDark = Color(0xFF34343A)
+
+class ThemeColorScheme(var isDark: Boolean, scheme: ColorScheme) {
+    val light = scheme.onSecondary
+    val dark = scheme.onSecondaryContainer
+    val primary = scheme.primary
+    val primaryContainer = if (isDark) scheme.primaryContainer else scheme.primary
+    val secondary =
+        if (isDark) scheme.primaryContainer.copy(alpha = 0.5f) else scheme.primaryContainer
+    val background = if (isDark) Color(0xee111111) else Color(0xffF1F1F1)
+    val secondaryContainer = if (isDark) Color.Black else Color.White
+    val white = Color.White
+    val black = Color.Black
+}

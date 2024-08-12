@@ -29,6 +29,8 @@ actual fun IRChatAppTheme(
         else -> lightScheme
     }
 
+    ThemeColors = ThemeColorScheme(darkTheme, colorScheme)
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {

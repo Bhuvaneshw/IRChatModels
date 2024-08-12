@@ -14,6 +14,8 @@ actual fun IRChatAppTheme(
         else -> lightScheme
     }
 
+    ThemeColors = ThemeColorScheme(darkTheme, colorScheme)
+
     MaterialTheme(
         colorScheme = colorScheme,
         typography = AppTypography,

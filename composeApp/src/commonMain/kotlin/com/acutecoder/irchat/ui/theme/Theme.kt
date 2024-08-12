@@ -87,3 +87,6 @@ expect fun IRChatAppTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 )
+
+lateinit var ThemeColors: ThemeColorScheme
+    internal set
