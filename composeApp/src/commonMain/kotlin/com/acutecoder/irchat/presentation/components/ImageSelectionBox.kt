@@ -28,8 +28,19 @@ import irchatmodels.composeapp.generated.resources.ic_send
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun ImageSelectionBox(onSendImage: () -> Unit) {
-    var path by remember { mutableStateOf<String?>(null) }
+fun ImageSelectionBox(enabled: Boolean, onSendImage: (ImageFile) -> Unit) {
+    var imageFile by remember { mutableStateOf<ImageFile?>(null) }
+    var showImagePicker by remember { mutableStateOf(false) }
+
+    if (showImagePicker) {
+        ImagePicker(
+            onPickImage = { image ->
+                showImagePicker = false
+                imageFile = image
+            },
+            onCancel = { showImagePicker = false }
+        )
+    }
 
     Row(
         modifier = Modifier
@@ -44,7 +55,7 @@ fun ImageSelectionBox(onSendImage: () -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
                 .weight(1f)
-                .clickable { path = "C:/TTF/Images/sample1.jpg" },
+                .clickable { showImagePicker = true },
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
@@ -57,10 +68,10 @@ fun ImageSelectionBox(onSendImage: () -> Unit) {
             )
 
             Text(
-                text = path?.let { it.substring(it.lastIndexOf("/") + 1) } ?: "Select Image",
+                text = imageFile?.name ?: "Select Image",
                 modifier = Modifier
                     .padding(horizontal = 12.dp),
-                color = ThemeColors.dark.copy(alpha = if (path == null) 0.6f else 1f)
+                color = ThemeColors.dark.copy(alpha = if (imageFile == null) 0.6f else 1f)
             )
         }
 
@@ -71,7 +82,10 @@ fun ImageSelectionBox(onSendImage: () -> Unit) {
                 .fillMaxHeight()
                 .background(color = ThemeColors.primary)
                 .aspectRatio(1.5f)
-                .clickable { onSendImage() }
+                .clickable(enabled = enabled && imageFile != null) {
+                    imageFile?.let { onSendImage(it) }
+                    imageFile = null
+                }
                 .padding(10.dp),
             tint = ThemeColors.white,
         )

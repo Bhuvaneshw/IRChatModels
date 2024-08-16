@@ -114,13 +114,12 @@ private fun ModelGrid(irModels: List<IRModel>, modifier: Modifier = Modifier) {
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 320.dp),
-        contentPadding = PaddingValues(12.dp),
+        contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = modifier
-            .widthIn(min = 200.dp, max = 1020.dp)
+        modifier = modifier.widthIn(min = 200.dp, max = 1020.dp),
     ) {
-        items(irModels) { model ->
+        items(irModels, key = { it.id }) { model ->
             ModelBox(
                 title = model.modelName,
                 subTitle = model.modelInfo,

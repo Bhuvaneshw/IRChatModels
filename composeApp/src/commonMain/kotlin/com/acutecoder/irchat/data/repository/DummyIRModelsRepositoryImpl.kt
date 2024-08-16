@@ -9,12 +9,12 @@ class DummyIRModelsRepositoryImpl : IRModelsRepository {
 
     override suspend fun connect() {
         withIO {
-            delay(3000)
+            delay(1000)
         }
     }
 
     override suspend fun loadModels(): List<IRModel> {
-        delay(5000)
+        delay(1000)
 
         return buildList {
             repeat(11) {
@@ -31,7 +31,7 @@ class DummyIRModelsRepositoryImpl : IRModelsRepository {
     }
 
     override suspend fun predict(): String {
-        delay(4000)
+        delay(1000)
 
         return (Math.random() * 100).toInt().toString()
     }
