@@ -27,10 +27,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.unit.dp
 import com.acutecoder.irchat.domain.model.ChatMessage
 import com.acutecoder.irchat.presentation.launchIO
+import com.acutecoder.irchat.presentation.loadAsImageBitmap
 import com.acutecoder.irchat.presentation.theme.ThemeColors
 import irchatmodels.composeapp.generated.resources.Res
 import irchatmodels.composeapp.generated.resources.ic_copy
@@ -69,7 +69,7 @@ private fun UserChatBubble(message: ChatMessage.UserMessage) {
 
     LaunchedEffect(Unit) {
         launchIO {
-            imageBitmap = loadImageBitmap(message.getInputStream())
+            imageBitmap = message.getInputStream().loadAsImageBitmap()
         }
     }
 

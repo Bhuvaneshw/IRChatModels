@@ -1,22 +1,27 @@
 package com.acutecoder.irchat.data.repository
 
+import com.acutecoder.irchat.domain.model.ApiEndPoint
 import com.acutecoder.irchat.domain.model.IRModel
+import com.acutecoder.irchat.domain.model.ResultBody
 import com.acutecoder.irchat.domain.repository.IRModelsRepository
+import com.acutecoder.irchat.presentation.components.ImageFile
 import com.acutecoder.irchat.presentation.withIO
 import kotlinx.coroutines.delay
 
 class DummyIRModelsRepositoryImpl : IRModelsRepository {
 
-    override suspend fun connect() {
+    override suspend fun connect(endPoint: ApiEndPoint): ResultBody {
         withIO {
             delay(1000)
         }
+
+        return ResultBody.Success(true)
     }
 
-    override suspend fun loadModels(): List<IRModel> {
+    override suspend fun loadModels(endPoint: ApiEndPoint): ResultBody {
         delay(1000)
 
-        return buildList {
+        return ResultBody.Success(buildList {
             repeat(11) {
                 add(
                     IRModel(
@@ -27,13 +32,18 @@ class DummyIRModelsRepositoryImpl : IRModelsRepository {
                     )
                 )
             }
-        }
+        })
     }
 
-    override suspend fun predict(): String {
+    override suspend fun predict(
+        endPoint: ApiEndPoint,
+        modelName: String,
+        modelType: String,
+        imageFile: ImageFile,
+    ): ResultBody {
         delay(1000)
 
-        return (Math.random() * 100).toInt().toString()
+        return ResultBody.Success((Math.random() * 100).toInt().toString())
     }
 
 }

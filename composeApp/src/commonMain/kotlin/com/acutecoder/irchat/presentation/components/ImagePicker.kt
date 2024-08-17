@@ -8,5 +8,5 @@ expect fun ImagePicker(onPickImage: (ImageFile) -> Unit, onCancel: () -> Unit)
 
 class ImageFile(
     val name: String,
-    val stream: InputStream
+    val newStream: () -> InputStream?,
 )

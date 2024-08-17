@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.acutecoder.irchat.presentation.theme.ThemeColors
+import com.acutecoder.irchat.presentation.titleCase
 import irchatmodels.composeapp.generated.resources.Res
 import irchatmodels.composeapp.generated.resources.ic_info
 import org.jetbrains.compose.resources.painterResource
@@ -136,7 +137,7 @@ private fun RowScope.ModelTitle(title: String, subTitle: String) {
             .weight(1f)
     ) {
         Text(
-            text = title,
+            text = title.titleCase(),
             modifier = Modifier
                 .padding(bottom = 2.dp),
             fontWeight = FontWeight.SemiBold,

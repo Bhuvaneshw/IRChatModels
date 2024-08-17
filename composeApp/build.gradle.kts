@@ -27,7 +27,6 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(compose.preview)
 
-            implementation(libs.ktor.client.okhttp)
             implementation(libs.koin.android)
         }
 
@@ -49,6 +48,7 @@ kotlin {
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.json)
+            implementation(libs.ktor.client.okhttp)
             implementation(libs.ktor.kotlinx.serialization)
             implementation(libs.ktor.client.content.negotiation)
 

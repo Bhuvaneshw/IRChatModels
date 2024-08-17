@@ -1,5 +1,6 @@
 package com.acutecoder.irchat.presentation
 
+import androidx.compose.ui.graphics.ImageBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,3 +51,5 @@ suspend fun InputStream.readAsByteArray(): ByteArray = withIO {
         output.toByteArray()
     }
 }
+
+expect fun InputStream.loadAsImageBitmap(): ImageBitmap

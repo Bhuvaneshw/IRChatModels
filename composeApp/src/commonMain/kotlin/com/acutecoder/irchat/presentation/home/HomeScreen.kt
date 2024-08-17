@@ -32,6 +32,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.acutecoder.irchat.domain.model.ApiEndPoint
 import com.acutecoder.irchat.domain.model.IRModel
 import com.acutecoder.irchat.presentation.chat.ChatScreen
 import com.acutecoder.irchat.presentation.components.ErrorBox
@@ -84,12 +85,15 @@ class HomeScreen : Screen {
             when (val loadingStatus = state.loadingStatus) {
                 is LoadingStatus.Loaded -> ModelGrid(
                     irModels = loadingStatus.irModels,
+                    endPoint = viewModel.endPoint,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
 
                 is LoadingStatus.Error -> ErrorBox(
                     error = loadingStatus.error,
                     modifier = Modifier.fillMaxSize(),
+                    centerAlign = true,
+                    onRetry = { viewModel.connect() }
                 )
 
                 LoadingStatus.Loading -> LoadingBox(
@@ -109,7 +113,11 @@ class HomeScreen : Screen {
 }
 
 @Composable
-private fun ModelGrid(irModels: List<IRModel>, modifier: Modifier = Modifier) {
+private fun ModelGrid(
+    irModels: List<IRModel>,
+    endPoint: ApiEndPoint,
+    modifier: Modifier = Modifier
+) {
     val navigator = LocalNavigator.currentOrThrow
 
     LazyVerticalGrid(
@@ -129,7 +137,8 @@ private fun ModelGrid(irModels: List<IRModel>, modifier: Modifier = Modifier) {
                 onExactModelClick = {
                     navigator.push(
                         ChatScreen(
-                            modelName = "digit_recognition",
+                            endPoint = endPoint,
+                            modelName = model.modelName,
                             modelType = "exact"
                         )
                     )
@@ -137,7 +146,8 @@ private fun ModelGrid(irModels: List<IRModel>, modifier: Modifier = Modifier) {
                 onApproxModelClick = {
                     navigator.push(
                         ChatScreen(
-                            modelName = "digit_recognition",
+                            endPoint = endPoint,
+                            modelName = model.modelName,
                             modelType = "approx"
                         )
                     )

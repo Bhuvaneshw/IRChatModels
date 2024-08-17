@@ -9,18 +9,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ErrorBox(error: String, modifier: Modifier = Modifier, onRetry: (() -> Unit)? = null) {
+fun ErrorBox(
+    error: String,
+    modifier: Modifier = Modifier,
+    centerAlign: Boolean = false,
+    onRetry: (() -> Unit)? = null
+) {
     Column(
-        modifier = modifier,
+        modifier = modifier.padding(8.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = error,
             color = Color.Red,
+            textAlign = if (centerAlign) TextAlign.Center else TextAlign.Start,
         )
 
         onRetry?.let {

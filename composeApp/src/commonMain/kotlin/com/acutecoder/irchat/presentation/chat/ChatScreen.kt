@@ -20,6 +20,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.acutecoder.irchat.domain.model.ApiEndPoint
 import com.acutecoder.irchat.presentation.components.ChatBubble
 import com.acutecoder.irchat.presentation.components.ErrorBox
 import com.acutecoder.irchat.presentation.components.ImageSelectionBox
@@ -32,6 +33,7 @@ import irchatmodels.composeapp.generated.resources.ic_back
 import kotlinx.coroutines.launch
 
 class ChatScreen(
+    private val endPoint: ApiEndPoint,
     private val modelName: String,
     private val modelType: String,
 ) : Screen {
@@ -68,13 +70,13 @@ class ChatScreen(
                         .weight(1f),
                     contentPadding = PaddingValues(20.dp),
                 ) {
-                    items(chatMessages, key = { it.id }) { message ->
+                    items(chatMessages, /*key = { it.id }*/) { message ->
                         ChatBubble(message)
                     }
 
                     loadingState.let {
                         if (it is ChatState.Error)
-                            item(key = { "Error" }) {
+                            item(/*key = { "Error" }*/) {
                                 PlainChatBubble {
                                     Text(
                                         text = "Error",
@@ -84,7 +86,7 @@ class ChatScreen(
                                 }
                             }
                         else if (it is ChatState.WaitingForReply)
-                            item(key = { viewModel.loadingId }) {
+                            item(/*key = { viewModel.loadingId }*/) {
                                 PlainChatBubble {
                                     Text(
                                         text = "Model",
@@ -97,9 +99,15 @@ class ChatScreen(
                 }
 
                 ImageSelectionBox(
-                    enabled = loadingState is ChatState.ReceivedReply,
+                    enabled = loadingState !is ChatState.WaitingForReply,
                     onSendImage = {
-                        viewModel.sendMessage(it)
+                        viewModel.sendMessage(
+                            endPoint = endPoint,
+                            modelName = modelName,
+                            modelType = modelType,
+                            imageFile = it
+                        )
+
                         scope.launch {
                             if (chatMessages.size > 0)
                                 listState.animateScrollToItem(chatMessages.lastIndex)

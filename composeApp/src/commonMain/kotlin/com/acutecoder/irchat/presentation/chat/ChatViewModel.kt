@@ -6,7 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.acutecoder.irchat.domain.model.ApiEndPoint
 import com.acutecoder.irchat.domain.model.ChatMessage
+import com.acutecoder.irchat.domain.model.ResultBody
 import com.acutecoder.irchat.domain.repository.IRModelsRepository
 import com.acutecoder.irchat.presentation.components.ImageFile
 import com.acutecoder.irchat.presentation.injectInstance
@@ -24,15 +26,43 @@ class ChatViewModel : ScreenModel {
     val state = _state.asStateFlow()
     var loadingId by mutableStateOf("")
 
-    fun sendMessage(image: ImageFile): String {
+    fun sendMessage(
+        endPoint: ApiEndPoint,
+        modelName: String,
+        modelType: String,
+        imageFile: ImageFile
+    ): String {
         updateState { ChatState.WaitingForReply }
 
         screenModelScope.launchIO {
-            chatMessages.add(ChatMessage.UserMessage(image.stream, UUID.randomUUID().toString()))
+            val imageStream = imageFile.newStream() ?: return@launchIO
+
+            chatMessages.add(
+                ChatMessage.UserMessage(
+                    imageStream,
+                    UUID.randomUUID().toString()
+                )
+            )
             loadingId = UUID.randomUUID().toString()
 
             try {
-                val reply = repository.predict()
+                val body = repository.predict(
+                    endPoint = endPoint,
+                    modelName = modelName,
+                    modelType = modelType,
+                    imageFile = imageFile
+                )
+
+                if (body is ResultBody.Error) {
+                    updateState { ChatState.Error(body.error) }
+                    return@launchIO
+                }
+
+                val reply = if (body is ResultBody.Success<*>) {
+                    if (body.result is String) body.result
+                    else "Error"
+                } else "Error"
+
                 chatMessages.add(ChatMessage.ModelMessage(result = reply, id = loadingId))
 
                 updateState { ChatState.ReceivedReply }

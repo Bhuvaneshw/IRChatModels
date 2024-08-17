@@ -25,7 +25,7 @@ actual fun ImagePicker(onPickImage: (ImageFile) -> Unit, onCancel: () -> Unit) {
         if (result == JFileChooser.APPROVE_OPTION) {
             val selectedFile: File = fileChooser.selectedFile
             scope.launchIO {
-                val inputStream = FileInputStream(selectedFile)
+                val inputStream = { FileInputStream(selectedFile) }
                 onPickImage(ImageFile(selectedFile.name, inputStream))
             }
         } else {
