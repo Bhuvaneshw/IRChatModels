@@ -2,6 +2,7 @@ package com.acutecoder.irchat.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -25,6 +26,7 @@ fun App() {
                 .statusBarsPadding()
                 .navigationBarsPadding()
                 .imePadding()
+                .displayCutoutPadding()
         ) {
             Navigator(HomeScreen())
         }
