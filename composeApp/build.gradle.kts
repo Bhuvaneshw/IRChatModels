@@ -106,8 +106,12 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.acutecoder.irchat"
+            packageName = "IR Chat Models"
             packageVersion = "1.0.0"
+            windows {
+                iconFile.set(project.file("src/desktopMain/desktop_icon.ico"))
+                menu = true
+            }
         }
     }
 }
