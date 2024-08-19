@@ -2,6 +2,7 @@ package com.acutecoder.irchat.data.repository
 
 import com.acutecoder.irchat.data.model.ConnectResultBody
 import com.acutecoder.irchat.data.model.ListModelsResultBody
+import com.acutecoder.irchat.data.model.PredictErrorResultBody
 import com.acutecoder.irchat.data.model.PredictResultBody
 import com.acutecoder.irchat.domain.model.ApiEndPoint
 import com.acutecoder.irchat.domain.model.IRModel
@@ -75,10 +76,19 @@ class IRModelsRepositoryImpl : IRModelsRepository {
                     })
                 })
 
-            val body = Json.decodeFromString<PredictResultBody>(
-                response.bodyAsText().apply { "Response".log(this) })
+            val bodyAsText = response.bodyAsText()
 
-            return ResultBody.Success(body.result)
+            try {
+                val body = Json.decodeFromString<PredictResultBody>(bodyAsText)
+                return ResultBody.Success(body.result)
+            } catch (e: Exception) {
+                try {
+                    val body = Json.decodeFromString<PredictErrorResultBody>(bodyAsText)
+                    return ResultBody.Error(body.error)
+                } catch (e: Exception) {
+                    return ResultBody.Error(e.message ?: "Unknown Error")
+                }
+            }
         } catch (e: Exception) {
             return ResultBody.Error(e.message ?: "Unknown Error")
         }

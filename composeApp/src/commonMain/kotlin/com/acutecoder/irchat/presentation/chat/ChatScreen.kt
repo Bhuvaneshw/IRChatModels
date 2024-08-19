@@ -70,13 +70,13 @@ class ChatScreen(
                         .weight(1f),
                     contentPadding = PaddingValues(20.dp),
                 ) {
-                    items(chatMessages, /*key = { it.id }*/) { message ->
+                    items(chatMessages, key = { it.id }) { message ->
                         ChatBubble(message)
                     }
 
                     loadingState.let {
                         if (it is ChatState.Error)
-                            item(/*key = { "Error" }*/) {
+                            item(key = "Error") {
                                 PlainChatBubble {
                                     Text(
                                         text = "Error",
@@ -86,7 +86,7 @@ class ChatScreen(
                                 }
                             }
                         else if (it is ChatState.WaitingForReply)
-                            item(/*key = { viewModel.loadingId }*/) {
+                            item(key = viewModel.loadingId) {
                                 PlainChatBubble {
                                     Text(
                                         text = "Model",

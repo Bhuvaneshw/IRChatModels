@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -28,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import com.acutecoder.irchat.domain.model.ChatMessage
 import com.acutecoder.irchat.presentation.launchIO
 import com.acutecoder.irchat.presentation.loadAsImageBitmap
@@ -45,15 +47,18 @@ fun ChatBubble(message: ChatMessage) {
 }
 
 @Composable
-fun PlainChatBubble(isAlignEnd: Boolean = false, block: @Composable ColumnScope.() -> Unit) {
+fun PlainChatBubble(
+    isAlignEnd: Boolean = false,
+    innerModifier: Modifier = Modifier.width(180.dp),
+    block: @Composable ColumnScope.() -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
         horizontalArrangement = if (isAlignEnd) Arrangement.End else Arrangement.Start,
     ) {
         Column(
-            modifier = Modifier
-                .width(180.dp)
+            modifier = innerModifier
                 .padding(8.dp)
                 .clip(RoundedCornerShape(20.dp))
                 .background(ThemeColors.secondaryContainer)
@@ -95,7 +100,10 @@ private fun UserChatBubble(message: ChatMessage.UserMessage) {
 
 @Composable
 private fun ModelChatBubble(message: ChatMessage.ModelMessage) {
-    PlainChatBubble {
+    PlainChatBubble(
+        innerModifier = Modifier
+            .widthIn(min = 180.dp, max = 800.dp)
+    ) {
         Text(
             text = "Model",
             modifier = Modifier.padding(8.dp)

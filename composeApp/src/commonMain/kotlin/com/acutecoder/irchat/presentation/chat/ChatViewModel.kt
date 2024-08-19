@@ -53,19 +53,16 @@ class ChatViewModel : ScreenModel {
                     imageFile = imageFile
                 )
 
-                if (body is ResultBody.Error) {
-                    updateState { ChatState.Error(body.error) }
-                    return@launchIO
-                }
-
                 val reply = if (body is ResultBody.Success<*>) {
                     if (body.result is String) body.result
                     else "Error"
+                } else if (body is ResultBody.Error) {
+                    body.error
                 } else "Error"
 
-                chatMessages.add(ChatMessage.ModelMessage(result = reply, id = loadingId))
-
                 updateState { ChatState.ReceivedReply }
+
+                chatMessages.add(ChatMessage.ModelMessage(result = reply, id = loadingId))
             } catch (e: Exception) {
                 updateState { ChatState.Error(e.message ?: "Unknown Error") }
             }

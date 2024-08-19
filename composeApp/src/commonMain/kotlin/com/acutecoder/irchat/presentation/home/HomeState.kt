@@ -3,7 +3,7 @@ package com.acutecoder.irchat.presentation.home
 import com.acutecoder.irchat.domain.model.IRModel
 
 data class HomeState(
-    var ipAddress: String? = "10.70.249.176",
+    var ipAddress: String? = "10.70.255.35",
     var port: String = "5000",
     var isConnected: Boolean = false,
     val loadingStatus: LoadingStatus = LoadingStatus.Loading,
