@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import com.acutecoder.irchat.domain.model.ChatMessage
 import com.acutecoder.irchat.presentation.launchIO
 import com.acutecoder.irchat.presentation.loadAsImageBitmap

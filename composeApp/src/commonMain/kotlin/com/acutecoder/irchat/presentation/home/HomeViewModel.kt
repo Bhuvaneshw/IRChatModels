@@ -20,9 +20,9 @@ class HomeViewModel : ScreenModel {
     var endPoint = ApiEndPoint(state.value.ipAddress ?: "localhost", state.value.port)
         private set
 
-    fun updateIp(ipAddress: String) {
+    fun updateIp(ipAddress: String, port: String) {
         _state.update {
-            it.copy(ipAddress = ipAddress)
+            it.copy(ipAddress = ipAddress, port = port)
         }
 
         connect()
@@ -74,6 +74,7 @@ class HomeViewModel : ScreenModel {
 
                 val models: List<IRModel> = if (body is ResultBody.Success<*>) {
                     if (body.result is List<*> && body.result.isNotEmpty() && body.result[0] is IRModel)
+                        @Suppress("UNCHECKED_CAST")
                         body.result as List<IRModel>
                     else emptyList()
                 } else emptyList()

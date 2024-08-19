@@ -1,5 +1,6 @@
 package com.acutecoder.irchat.presentation
 
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,3 +54,17 @@ suspend fun InputStream.readAsByteArray(): ByteArray = withIO {
 }
 
 expect fun InputStream.loadAsImageBitmap(): ImageBitmap
+
+inline fun String.isDigitsOnly(predicate: (Char) -> Boolean = { it.isDigit() }) = all(predicate)
+
+inline fun Modifier.ifThen(condition: Boolean, other: (Modifier) -> Modifier) =
+    if (condition)
+        this then other(this)
+    else this
+
+inline fun <T> T.tryRun(block: T.() -> Unit) {
+    try {
+        block()
+    } catch (_: Exception) {
+    }
+}

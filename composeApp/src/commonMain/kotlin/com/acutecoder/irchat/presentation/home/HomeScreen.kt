@@ -5,14 +5,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -36,21 +40,24 @@ import com.acutecoder.irchat.domain.model.ApiEndPoint
 import com.acutecoder.irchat.domain.model.IRModel
 import com.acutecoder.irchat.presentation.chat.ChatScreen
 import com.acutecoder.irchat.presentation.components.ErrorBox
+import com.acutecoder.irchat.presentation.components.IpInputBox
 import com.acutecoder.irchat.presentation.components.LoadingBox
 import com.acutecoder.irchat.presentation.components.ModelBox
 import com.acutecoder.irchat.presentation.components.StatusText
 import com.acutecoder.irchat.presentation.components.Toolbar
 import com.acutecoder.irchat.presentation.components.ToolbarIcon
+import com.acutecoder.irchat.presentation.isDigitsOnly
 import com.acutecoder.irchat.presentation.theme.ThemeColors
 import irchatmodels.composeapp.generated.resources.Res
 import irchatmodels.composeapp.generated.resources.ic_change_ip
 import irchatmodels.composeapp.generated.resources.ic_refresh
+import org.jetbrains.compose.resources.painterResource
 
 class HomeScreen : Screen {
 
     @Composable
     override fun Content() {
-        var showChangeIpDialog by remember { mutableStateOf(false) }
+        var showChangeIpDialog by remember { mutableStateOf(true) }
         val viewModel = rememberScreenModel { HomeViewModel() }
         val state by viewModel.state.collectAsState()
 
@@ -76,7 +83,7 @@ class HomeScreen : Screen {
             )
 
             StatusText(
-                status = if (state.isConnected) "Connected to ${state.ipAddress}:${state.port}" else "Connecting...",
+                status = if (state.isConnected) "Connected to ${state.ipAddress}${if (state.port.isNotBlank()) ":${state.port}" else ""}" else "Connecting...",
                 modifier = Modifier
                     .padding(end = 12.dp)
                     .align(Alignment.End)
@@ -105,8 +112,9 @@ class HomeScreen : Screen {
         if (showChangeIpDialog || state.ipAddress == null) {
             ChangeIpDialog(
                 ipAddress = state.ipAddress ?: "",
+                port = state.port,
                 dismiss = { showChangeIpDialog = false },
-                onChangeIp = { viewModel.updateIp(it) }
+                onChangeIp = { ip, port -> viewModel.updateIp(ip, port) }
             )
         }
     }
@@ -158,8 +166,15 @@ private fun ModelGrid(
 }
 
 @Composable
-private fun ChangeIpDialog(ipAddress: String, dismiss: () -> Unit, onChangeIp: (String) -> Unit) {
+private fun ChangeIpDialog(
+    ipAddress: String,
+    port: String,
+    dismiss: () -> Unit,
+    onChangeIp: (String, String) -> Unit
+) {
     var ipText by remember { mutableStateOf(ipAddress) }
+    var portText by remember { mutableStateOf(port) }
+    var isEditingPlainAddress by remember { mutableStateOf(!isIpAddress(ipAddress)) }
 
     Dialog(onDismissRequest = dismiss) {
         Column(
@@ -167,23 +182,49 @@ private fun ChangeIpDialog(ipAddress: String, dismiss: () -> Unit, onChangeIp: (
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(20.dp))
                 .background(color = ThemeColors.background)
-                .padding(start = 8.dp, top = 8.dp)
+                .padding(start = 8.dp)
                 .padding(16.dp)
         ) {
-            Text(
-                text = "Enter Ip Address",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+            Row(
+                modifier = Modifier.padding(bottom = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Enter Ip Address",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.weight(1f)
+                )
 
-            TextField(
-                value = ipText,
-                onValueChange = { newText ->
-                    ipText = newText
-                },
-                singleLine = true,
-                label = { Text("Enter the IP") },
-                modifier = Modifier.fillMaxWidth(),
+                Icon(
+                    painter = painterResource(Res.drawable.ic_change_ip),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(38.dp)
+                        .clip(CircleShape)
+                        .clickable { isEditingPlainAddress = !isEditingPlainAddress }
+                        .padding(8.dp)
+                )
+            }
+
+            if (isEditingPlainAddress)
+                TextField(
+                    value = ipText + if (portText.isNotBlank()) ":$portText" else "",
+                    onValueChange = { newText ->
+                        val parts = newText.split(":")
+                        ipText = parts[0]
+                        portText = if (parts.size > 1) parts[1] else ""
+                    },
+                    singleLine = true,
+                    label = { Text("Enter the IP") },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            else IpInputBox(
+                ipAddress = { ipText },
+                port = { portText },
+                onValueChange = { newAddress, newPort ->
+                    ipText = newAddress
+                    portText = newPort
+                }
             )
 
             Text(
@@ -194,7 +235,7 @@ private fun ChangeIpDialog(ipAddress: String, dismiss: () -> Unit, onChangeIp: (
                     .clip(RoundedCornerShape(8.dp))
                     .clickable {
                         dismiss()
-                        onChangeIp(ipText)
+                        onChangeIp(ipText, portText)
                     }
                     .padding(vertical = 8.dp, horizontal = 12.dp),
                 style = MaterialTheme.typography.bodyMedium,
@@ -203,4 +244,8 @@ private fun ChangeIpDialog(ipAddress: String, dismiss: () -> Unit, onChangeIp: (
 
         }
     }
+}
+
+private fun isIpAddress(ipAddress: String): Boolean {
+    return ipAddress.split(" ", ".", ":").all { it.isDigitsOnly() }
 }

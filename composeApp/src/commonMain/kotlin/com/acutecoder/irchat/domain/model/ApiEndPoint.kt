@@ -25,7 +25,7 @@ data class ApiEndPoint(
         }
     }
 
-    private fun connectionString() = "http://$ip:$port"
+    private fun connectionString() = "http://$ip" + if (port.isNotBlank()) ":$port" else ""
 
     fun routeConnect() = connectionString() + "/connect"
 
