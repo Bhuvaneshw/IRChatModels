@@ -68,3 +68,5 @@ inline fun <T> T.tryRun(block: T.() -> Unit) {
     } catch (_: Exception) {
     }
 }
+
+expect fun copyToClipboard(text: String)

@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import com.acutecoder.irchat.domain.model.ChatMessage
+import com.acutecoder.irchat.presentation.copyToClipboard
 import com.acutecoder.irchat.presentation.launchIO
 import com.acutecoder.irchat.presentation.loadAsImageBitmap
 import com.acutecoder.irchat.presentation.theme.ThemeColors
@@ -125,6 +126,7 @@ private fun ModelChatBubble(message: ChatMessage.ModelMessage) {
                 .size(30.dp)
                 .clip(CircleShape)
                 .clickable {
+                    copyToClipboard(message.result)
                 }
                 .padding(8.dp)
         )
