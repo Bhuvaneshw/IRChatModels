@@ -57,7 +57,7 @@ class HomeScreen : Screen {
 
     @Composable
     override fun Content() {
-        var showChangeIpDialog by remember { mutableStateOf(true) }
+        var showChangeIpDialog by remember { mutableStateOf(false) }
         val viewModel = rememberScreenModel { HomeViewModel() }
         val state by viewModel.state.collectAsState()
 
