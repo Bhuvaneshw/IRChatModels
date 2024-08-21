@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import com.acutecoder.irchat.core.InputStreamDelegate
 import com.acutecoder.irchat.presentation.getFileName
 import com.acutecoder.irchat.presentation.launchIO
 
@@ -19,10 +20,12 @@ actual fun ImagePicker(onPickImage: (ImageFile) -> Unit, onCancel: () -> Unit) {
         rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
             scope.launchIO {
                 it?.let { uri ->
-                    val newStream = { context.contentResolver.openInputStream(uri) }
+                    val newStream = context.contentResolver.openInputStream(uri)
                     val fileName = context.getFileName(uri) ?: "Unknown.jpg"
 
-                    onPickImage(ImageFile(fileName, newStream))
+                    onPickImage(ImageFile(fileName) {
+                        newStream?.let { InputStreamDelegate(it) }
+                    })
                 } ?: onCancel()
             }
         }

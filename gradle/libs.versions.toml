@@ -13,12 +13,12 @@ androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
 compose-plugin = "1.6.11"
 junit = "4.13.2"
-koin = "3.5.6"
-koinCompose = "1.1.5"
+koin = "3.6.0-wasm-alpha2"
+koinCompose = "3.6.0-wasm-alpha2"
 kotlin = "2.0.0"
 kotlinx-coroutines = "1.8.1"
 kotlinxSerializationJson = "1.7.1"
-ktorClient = "2.3.12"
+ktorClient = "3.0.0-wasm2"
 voyager = "1.1.0-beta02"
 
 [libraries]
@@ -42,7 +42,8 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClient" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClient" }
 ktor-client-json = { module = "io.ktor:ktor-client-json", version.ref = "ktorClient" }
-ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClient" }
+ktor-client-engine-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClient" }
+ktor-client-engine-js = { module = "io.ktor:ktor-client-js", version.ref = "ktorClient" }
 ktor-kotlinx-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClient" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-screenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }

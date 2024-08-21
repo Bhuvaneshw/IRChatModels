@@ -1,8 +1,8 @@
 package com.acutecoder.irchat.domain.model
 
+import com.acutecoder.irchat.core.ByteArrayInputStream
+import com.acutecoder.irchat.core.InputStream
 import com.acutecoder.irchat.presentation.readAsByteArray
-import java.io.ByteArrayInputStream
-import java.io.InputStream
 
 sealed interface ChatMessage {
 

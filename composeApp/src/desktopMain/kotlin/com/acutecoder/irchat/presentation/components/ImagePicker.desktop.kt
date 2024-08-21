@@ -3,6 +3,7 @@ package com.acutecoder.irchat.presentation.components
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import com.acutecoder.irchat.core.InputStreamDelegate
 import com.acutecoder.irchat.presentation.launchIO
 import java.io.File
 import java.io.FileInputStream
@@ -25,8 +26,10 @@ actual fun ImagePicker(onPickImage: (ImageFile) -> Unit, onCancel: () -> Unit) {
         if (result == JFileChooser.APPROVE_OPTION) {
             val selectedFile: File = fileChooser.selectedFile
             scope.launchIO {
-                val inputStream = { FileInputStream(selectedFile) }
-                onPickImage(ImageFile(selectedFile.name, inputStream))
+                val inputStream = FileInputStream(selectedFile)
+                onPickImage(ImageFile(selectedFile.name) {
+                    InputStreamDelegate(inputStream)
+                })
             }
         } else {
             onCancel()

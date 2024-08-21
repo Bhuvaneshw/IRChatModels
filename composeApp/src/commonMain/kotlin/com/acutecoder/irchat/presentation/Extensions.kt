@@ -2,36 +2,26 @@ package com.acutecoder.irchat.presentation
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import com.acutecoder.irchat.core.ByteArrayOutputStream
+import com.acutecoder.irchat.core.InputStream
+import com.acutecoder.irchat.core.use
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
 
 fun Any?.log(message: Any?) {
-    val stackTrace = Thread.currentThread().stackTrace[2]
-    logInternal(
-        tag = if (this is String) this else "$this",
-        "$message (${stackTrace.fileName}:${stackTrace.lineNumber})"
-    )
+    logInternal(message)
 }
 
-expect fun logInternal(tag: String, message: String)
+expect fun Any?.logInternal(message: Any?)
 
 fun String.titleCase(): String {
     return split(" ", "_").joinToString(separator = " ") { it[0].uppercase() + it.substring(1) }
 }
 
-suspend inline fun <T> withIO(noinline block: suspend CoroutineScope.() -> T): T {
-    return withContext(Dispatchers.IO, block)
-}
+expect suspend inline fun <T> withIO(noinline block: suspend CoroutineScope.() -> T): T
 
-fun CoroutineScope.launchIO(block: suspend CoroutineScope.() -> Unit) {
-    launch(Dispatchers.IO, block = block)
-}
+expect fun CoroutineScope.launchIO(block: suspend CoroutineScope.() -> Unit)
 
 inline fun <reified T> injectInstance(): T {
     return object : KoinComponent {

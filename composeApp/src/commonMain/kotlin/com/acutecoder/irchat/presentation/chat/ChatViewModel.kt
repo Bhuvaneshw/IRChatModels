@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.acutecoder.irchat.core.UUID
 import com.acutecoder.irchat.domain.model.ApiEndPoint
 import com.acutecoder.irchat.domain.model.ChatMessage
 import com.acutecoder.irchat.domain.model.ResultBody
@@ -16,7 +17,6 @@ import com.acutecoder.irchat.presentation.launchIO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.util.UUID
 
 class ChatViewModel : ScreenModel {
 
@@ -40,10 +40,10 @@ class ChatViewModel : ScreenModel {
             chatMessages.add(
                 ChatMessage.UserMessage(
                     imageStream,
-                    UUID.randomUUID().toString()
+                    UUID.randomUUID()
                 )
             )
-            loadingId = UUID.randomUUID().toString()
+            loadingId = UUID.randomUUID()
 
             try {
                 val body = repository.predict(

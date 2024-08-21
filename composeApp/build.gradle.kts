@@ -1,6 +1,8 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -11,6 +13,23 @@ plugins {
 }
 
 kotlin {
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        moduleName = "composeApp"
+        browser {
+            val projectDirPath = project.projectDir.path
+            commonWebpackConfig {
+                outputFileName = "composeApp.js"
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+                    static = (static ?: mutableListOf()).apply {
+                        add(projectDirPath)
+                    }
+                }
+            }
+        }
+        binaries.executable()
+    }
+
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
@@ -22,12 +41,14 @@ kotlin {
 
     sourceSets {
         val desktopMain by getting
+        val wasmJsMain by getting
 
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
             implementation(compose.preview)
 
             implementation(libs.koin.android)
+            implementation(libs.ktor.client.engine.okhttp)
         }
 
         commonMain.dependencies {
@@ -48,7 +69,6 @@ kotlin {
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.json)
-            implementation(libs.ktor.client.okhttp)
             implementation(libs.ktor.kotlinx.serialization)
             implementation(libs.ktor.client.content.negotiation)
 
@@ -59,6 +79,11 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.ktor.client.engine.okhttp)
+        }
+
+        wasmJsMain.dependencies {
+            implementation(libs.ktor.client.engine.js)
         }
     }
 }
