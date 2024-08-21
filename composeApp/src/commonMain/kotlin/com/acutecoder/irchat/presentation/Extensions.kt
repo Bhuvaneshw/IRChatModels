@@ -9,11 +9,13 @@ import kotlinx.coroutines.CoroutineScope
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-fun Any?.log(message: Any?) {
-    logInternal(message)
+fun log(message: String, tag: String = "") = tag.log(message)
+
+fun Any.log(message: Any?) {
+    logInternal(if (this is String) this else "", "$message")
 }
 
-expect fun Any?.logInternal(message: Any?)
+internal expect fun logInternal(tag: String, message: String)
 
 fun String.titleCase(): String {
     return split(" ", "_").joinToString(separator = " ") { it[0].uppercase() + it.substring(1) }
@@ -60,3 +62,7 @@ inline fun <T> T.tryRun(block: T.() -> Unit) {
 }
 
 expect fun copyToClipboard(text: String)
+
+fun isIpAddress(ipAddress: String): Boolean {
+    return ipAddress.split(" ", ".", ":").all { it.isDigitsOnly() }
+}

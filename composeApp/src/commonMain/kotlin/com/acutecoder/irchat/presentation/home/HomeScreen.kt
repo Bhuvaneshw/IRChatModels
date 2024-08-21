@@ -46,7 +46,8 @@ import com.acutecoder.irchat.presentation.components.ModelBox
 import com.acutecoder.irchat.presentation.components.StatusText
 import com.acutecoder.irchat.presentation.components.Toolbar
 import com.acutecoder.irchat.presentation.components.ToolbarIcon
-import com.acutecoder.irchat.presentation.isDigitsOnly
+import com.acutecoder.irchat.presentation.isIpAddress
+import com.acutecoder.irchat.presentation.theme.Dimen
 import com.acutecoder.irchat.presentation.theme.ThemeColors
 import irchatmodels.composeapp.generated.resources.Res
 import irchatmodels.composeapp.generated.resources.ic_change_ip
@@ -129,11 +130,11 @@ private fun ModelGrid(
     val navigator = LocalNavigator.currentOrThrow
 
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 320.dp),
+        columns = GridCells.Adaptive(minSize = Dimen.HomeGridCellMinSize),
         contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = modifier.widthIn(min = 200.dp, max = 1020.dp),
+        modifier = modifier.widthIn(Dimen.HomeGridMinWidth, Dimen.HomeGridMaxWidth),
     ) {
         items(irModels, key = { it.id }) { model ->
             ModelBox(
@@ -244,8 +245,4 @@ private fun ChangeIpDialog(
 
         }
     }
-}
-
-private fun isIpAddress(ipAddress: String): Boolean {
-    return ipAddress.split(" ", ".", ":").all { it.isDigitsOnly() }
 }

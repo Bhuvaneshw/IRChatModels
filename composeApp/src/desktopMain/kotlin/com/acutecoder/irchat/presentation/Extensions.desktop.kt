@@ -10,12 +10,9 @@ import kotlinx.coroutines.withContext
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 
-actual fun Any?.logInternal(message: Any?) {
+internal actual fun logInternal(tag: String, message: String) {
     val stackTrace = Thread.currentThread().stackTrace[2]
-    System.err.println(
-        if (this is String) this else "$this" +
-                ": $message (${stackTrace.fileName}:${stackTrace.lineNumber})"
-    )
+    System.err.println("$tag: $message (${stackTrace.fileName}:${stackTrace.lineNumber})")
 }
 
 actual fun InputStream.loadAsImageBitmap(): ImageBitmap {

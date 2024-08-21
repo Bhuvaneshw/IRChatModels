@@ -12,9 +12,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class HomeViewModel : ScreenModel {
-
+class HomeViewModel(
     private val repository: IRModelsRepository = injectInstance()
+) : ScreenModel {
+
     private var _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
     var endPoint = ApiEndPoint(state.value.ipAddress ?: "localhost", state.value.port)

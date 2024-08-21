@@ -16,12 +16,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-actual fun Any?.logInternal(message: Any?) {
+internal actual fun logInternal(tag: String, message: String) {
     val stackTrace = Thread.currentThread().stackTrace[2]
-    Log.e(
-        if (this is String) this else "$this",
-        "$message (${stackTrace.fileName}:${stackTrace.lineNumber})"
-    )
+    Log.e(tag, "$message (${stackTrace.fileName}:${stackTrace.lineNumber})")
 }
 
 actual fun InputStream.loadAsImageBitmap(): ImageBitmap {

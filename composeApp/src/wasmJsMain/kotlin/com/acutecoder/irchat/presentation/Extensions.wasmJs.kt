@@ -15,13 +15,14 @@ import kotlinx.coroutines.promise
 import kotlinx.coroutines.withContext
 import org.jetbrains.skia.Image
 
-actual fun Any?.logInternal(message: Any?) {
-//    js(
-//        "console.error(`${
-//            if (this is String) this else "$this" +
-//                    ": $message"
-//        }`)"
-//    )
+actual fun logInternal(tag: String, message: String) {
+    console.log("$tag: $message")
+}
+
+@Suppress("CLASSNAME")
+external object console : JsAny {
+    fun log(message: String)
+    fun error(message: String)
 }
 
 actual fun InputStream.loadAsImageBitmap(): ImageBitmap {
@@ -40,10 +41,10 @@ actual fun CoroutineScope.launchIO(block: suspend CoroutineScope.() -> Unit) {
 actual fun copyToClipboard(text: String) {
     GlobalScope.promise {
         try {
-            window.navigator.clipboard.writeText(text).await()
-//            console.log("Text copied to clipboard")
+            window.navigator.clipboard.writeText(text).await<JsAny>()
+            console.log("Text copied to clipboard")
         } catch (e: Throwable) {
-//            console.error("Failed to copy text to clipboard", e)
+            console.error("Failed to copy text to clipboard, $e")
         }
     }
 }

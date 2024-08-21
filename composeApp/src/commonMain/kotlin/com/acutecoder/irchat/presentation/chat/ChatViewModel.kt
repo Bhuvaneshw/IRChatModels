@@ -18,9 +18,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class ChatViewModel : ScreenModel {
-
+class ChatViewModel(
     private val repository: IRModelsRepository = injectInstance()
+) : ScreenModel {
+
     val chatMessages = mutableStateListOf<ChatMessage>()
     private var _state = MutableStateFlow<ChatState>(ChatState.ReceivedReply)
     val state = _state.asStateFlow()
