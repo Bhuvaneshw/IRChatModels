@@ -3,7 +3,6 @@ package com.acutecoder.irchat.presentation.components
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import com.acutecoder.irchat.core.ByteArrayInputStream
 import kotlinx.browser.document
 import kotlinx.coroutines.launch
 import org.khronos.webgl.ArrayBuffer
@@ -29,12 +28,15 @@ actual fun ImagePicker(onPickImage: (ImageFile) -> Unit, onCancel: () -> Unit) {
                 val reader = FileReader()
                 reader.onload = {
                     val arrayBuffer = Uint8Array(reader.result as ArrayBuffer)
-                    val byteArray = ByteArray(arrayBuffer.byteLength) { arrayBuffer[it] }
+
                     scope.launch {
                         onPickImage(
                             ImageFile(
-                                file.name
-                            ) { ByteArrayInputStream(byteArray) }
+                                name = file.name,
+                                toByteArray = {
+                                    ByteArray(arrayBuffer.byteLength) { arrayBuffer[it] }
+                                }
+                            )
                         )
                     }
                 }

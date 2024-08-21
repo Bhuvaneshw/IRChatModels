@@ -10,19 +10,19 @@ import android.provider.OpenableColumns
 import android.util.Log
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import com.acutecoder.irchat.core.InputStream
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.UUID
 
 internal actual fun logInternal(tag: String, message: String) {
     val stackTrace = Thread.currentThread().stackTrace[2]
     Log.e(tag, "$message (${stackTrace.fileName}:${stackTrace.lineNumber})")
 }
 
-actual fun InputStream.loadAsImageBitmap(): ImageBitmap {
-    return BitmapFactory.decodeStream(this).asImageBitmap()
+actual fun ByteArray.loadAsImageBitmap(): ImageBitmap {
+    return BitmapFactory.decodeByteArray(this, 0, size).asImageBitmap()
 }
 
 fun Context.getFileName(uri: Uri): String? {
@@ -56,3 +56,5 @@ actual suspend inline fun <T> withIO(noinline block: suspend CoroutineScope.() -
 actual fun CoroutineScope.launchIO(block: suspend CoroutineScope.() -> Unit) {
     launch(Dispatchers.IO, block = block)
 }
+
+actual fun randomUUID(): String = UUID.randomUUID().toString()

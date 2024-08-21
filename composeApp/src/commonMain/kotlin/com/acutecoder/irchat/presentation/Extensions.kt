@@ -2,9 +2,6 @@ package com.acutecoder.irchat.presentation
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
-import com.acutecoder.irchat.core.ByteArrayOutputStream
-import com.acutecoder.irchat.core.InputStream
-import com.acutecoder.irchat.core.use
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -31,21 +28,7 @@ inline fun <reified T> injectInstance(): T {
     }.value
 }
 
-suspend fun InputStream.readAsByteArray(): ByteArray = withIO {
-    use { stream ->
-        val buffer = ByteArray(1024)
-        val output = ByteArrayOutputStream()
-
-        var bytesRead: Int
-        while (stream.read(buffer).also { bytesRead = it } != -1) {
-            output.write(buffer, 0, bytesRead)
-        }
-
-        output.toByteArray()
-    }
-}
-
-expect fun InputStream.loadAsImageBitmap(): ImageBitmap
+expect fun ByteArray.loadAsImageBitmap(): ImageBitmap
 
 inline fun String.isDigitsOnly(predicate: (Char) -> Boolean = { it.isDigit() }) = all(predicate)
 
@@ -66,3 +49,5 @@ expect fun copyToClipboard(text: String)
 fun isIpAddress(ipAddress: String): Boolean {
     return ipAddress.split(" ", ".", ":").all { it.isDigitsOnly() }
 }
+
+expect fun randomUUID(): String

@@ -10,7 +10,6 @@ import com.acutecoder.irchat.domain.model.ResultBody
 import com.acutecoder.irchat.domain.repository.IRModelsRepository
 import com.acutecoder.irchat.presentation.components.ImageFile
 import com.acutecoder.irchat.presentation.log
-import com.acutecoder.irchat.presentation.readAsByteArray
 import com.acutecoder.irchat.presentation.withIO
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
@@ -62,7 +61,7 @@ class IRModelsRepositoryImpl : IRModelsRepository {
         imageFile: ImageFile,
     ): ResultBody {
         try {
-            val imageBytes = imageFile.newStream()?.readAsByteArray()
+            val imageBytes = imageFile.toByteArray()
                 ?: return ResultBody.Error("Unable to read image")
 
             val response = endPoint.client.submitFormWithBinaryData(

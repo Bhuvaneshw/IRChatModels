@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.acutecoder.irchat.core.UUID
 import com.acutecoder.irchat.domain.model.ApiEndPoint
 import com.acutecoder.irchat.domain.model.ChatMessage
 import com.acutecoder.irchat.domain.model.ResultBody
@@ -14,6 +13,8 @@ import com.acutecoder.irchat.domain.repository.IRModelsRepository
 import com.acutecoder.irchat.presentation.components.ImageFile
 import com.acutecoder.irchat.presentation.injectInstance
 import com.acutecoder.irchat.presentation.launchIO
+import com.acutecoder.irchat.presentation.randomUUID
+import com.acutecoder.irchat.presentation.withIO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -36,15 +37,15 @@ class ChatViewModel(
         updateState { ChatState.WaitingForReply }
 
         screenModelScope.launchIO {
-            val imageStream = imageFile.newStream() ?: return@launchIO
+            val imageStream = suspend { withIO { imageFile.toByteArray() } }
 
             chatMessages.add(
                 ChatMessage.UserMessage(
                     imageStream,
-                    UUID.randomUUID()
+                    randomUUID()
                 )
             )
-            loadingId = UUID.randomUUID()
+            loadingId = randomUUID()
 
             try {
                 val body = repository.predict(

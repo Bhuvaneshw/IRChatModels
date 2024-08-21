@@ -74,7 +74,7 @@ private fun UserChatBubble(message: ChatMessage.UserMessage) {
 
     LaunchedEffect(Unit) {
         launchIO {
-            imageBitmap = message.getInputStream().loadAsImageBitmap()
+            imageBitmap = message.loadBytes()?.loadAsImageBitmap()
         }
     }
 

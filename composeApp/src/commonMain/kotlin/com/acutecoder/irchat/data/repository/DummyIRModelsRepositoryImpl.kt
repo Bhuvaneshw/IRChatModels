@@ -1,6 +1,5 @@
 package com.acutecoder.irchat.data.repository
 
-import com.acutecoder.irchat.core.Math
 import com.acutecoder.irchat.domain.model.ApiEndPoint
 import com.acutecoder.irchat.domain.model.IRModel
 import com.acutecoder.irchat.domain.model.ResultBody
@@ -8,6 +7,7 @@ import com.acutecoder.irchat.domain.repository.IRModelsRepository
 import com.acutecoder.irchat.presentation.components.ImageFile
 import com.acutecoder.irchat.presentation.withIO
 import kotlinx.coroutines.delay
+import kotlin.random.Random
 
 class DummyIRModelsRepositoryImpl : IRModelsRepository {
 
@@ -44,7 +44,7 @@ class DummyIRModelsRepositoryImpl : IRModelsRepository {
     ): ResultBody {
         delay(1000)
 
-        return ResultBody.Success((Math.random() * 100).toInt().toString())
+        return ResultBody.Success((Random.nextFloat() * 100).toInt().toString())
     }
 
 }
