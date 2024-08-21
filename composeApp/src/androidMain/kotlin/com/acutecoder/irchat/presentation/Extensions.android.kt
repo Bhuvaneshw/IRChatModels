@@ -21,7 +21,7 @@ internal actual fun logInternal(tag: String, message: String) {
     Log.e(tag, "$message (${stackTrace.fileName}:${stackTrace.lineNumber})")
 }
 
-actual fun ByteArray.loadAsImageBitmap(): ImageBitmap {
+actual fun ByteArray.toImageBitmap(): ImageBitmap {
     return BitmapFactory.decodeByteArray(this, 0, size).asImageBitmap()
 }
 

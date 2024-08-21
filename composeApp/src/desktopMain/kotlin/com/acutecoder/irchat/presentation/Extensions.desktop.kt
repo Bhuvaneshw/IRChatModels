@@ -16,7 +16,7 @@ internal actual fun logInternal(tag: String, message: String) {
     System.err.println("$tag: $message (${stackTrace.fileName}:${stackTrace.lineNumber})")
 }
 
-actual fun ByteArray.loadAsImageBitmap(): ImageBitmap {
+actual fun ByteArray.toImageBitmap(): ImageBitmap {
     return Image.makeFromEncoded(this).toComposeImageBitmap()
 }
 

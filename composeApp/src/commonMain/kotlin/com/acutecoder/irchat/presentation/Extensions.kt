@@ -28,7 +28,7 @@ inline fun <reified T> injectInstance(): T {
     }.value
 }
 
-expect fun ByteArray.loadAsImageBitmap(): ImageBitmap
+expect fun ByteArray.toImageBitmap(): ImageBitmap
 
 inline fun String.isDigitsOnly(predicate: (Char) -> Boolean = { it.isDigit() }) = all(predicate)
 

@@ -24,7 +24,7 @@ external object console : JsAny {
     fun error(message: String)
 }
 
-actual fun ByteArray.loadAsImageBitmap(): ImageBitmap {
+actual fun ByteArray.toImageBitmap(): ImageBitmap {
     return Image.makeFromEncoded(this).toComposeImageBitmap()
 }
 
