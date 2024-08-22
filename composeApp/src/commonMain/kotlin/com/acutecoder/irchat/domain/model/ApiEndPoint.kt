@@ -7,23 +7,9 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 data class ApiEndPoint(
-    private val ip: String,
-    private val port: String
+    val ip: String,
+    val port: String
 ) {
-    val client = HttpClient {
-        install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-                isLenient = true
-            })
-        }
-
-        install(HttpTimeout) {
-            requestTimeoutMillis = 5000
-            connectTimeoutMillis = 3000
-            socketTimeoutMillis = 5000
-        }
-    }
 
     private fun connectionString() = "http://$ip" + if (port.isNotBlank()) ":$port" else ""
 
@@ -38,3 +24,19 @@ data class ApiEndPoint(
     }
 
 }
+
+val ApiEndPoint.client: HttpClient
+    get() = HttpClient {
+        install(ContentNegotiation) {
+            json(Json {
+                ignoreUnknownKeys = true
+                isLenient = true
+            })
+        }
+
+        install(HttpTimeout) {
+            requestTimeoutMillis = 5000
+            connectTimeoutMillis = 3000
+            socketTimeoutMillis = 5000
+        }
+    }

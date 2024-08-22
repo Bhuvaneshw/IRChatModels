@@ -33,7 +33,8 @@ import irchatmodels.composeapp.generated.resources.ic_back
 import kotlinx.coroutines.launch
 
 class ChatScreen(
-    private val endPoint: ApiEndPoint,
+    private val ip: String,
+    private val port: String,
     private val modelName: String,
     private val modelType: String,
 ) : Screen {
@@ -102,7 +103,7 @@ class ChatScreen(
                     enabled = loadingState !is ChatState.WaitingForReply,
                     onSendImage = {
                         viewModel.sendMessage(
-                            endPoint = endPoint,
+                            endPoint = ApiEndPoint(ip, port),
                             modelName = modelName,
                             modelType = modelType,
                             imageFile = it

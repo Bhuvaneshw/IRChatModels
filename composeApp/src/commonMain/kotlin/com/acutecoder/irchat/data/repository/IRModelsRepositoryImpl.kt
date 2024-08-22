@@ -7,6 +7,7 @@ import com.acutecoder.irchat.data.model.PredictResultBody
 import com.acutecoder.irchat.domain.model.ApiEndPoint
 import com.acutecoder.irchat.domain.model.IRModel
 import com.acutecoder.irchat.domain.model.ResultBody
+import com.acutecoder.irchat.domain.model.client
 import com.acutecoder.irchat.domain.repository.IRModelsRepository
 import com.acutecoder.irchat.presentation.components.ImageFile
 import com.acutecoder.irchat.presentation.log
