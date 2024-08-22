@@ -134,7 +134,9 @@ private fun ModelGrid(
         contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = modifier.widthIn(Dimen.HomeGridMinWidth, Dimen.HomeGridMaxWidth),
+        modifier = modifier
+            .widthIn(Dimen.HomeGridMinWidth, Dimen.HomeGridMaxWidth)
+            .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
     ) {
         items(irModels, key = { it.id }) { model ->
             ModelBox(
@@ -146,7 +148,8 @@ private fun ModelGrid(
                 onExactModelClick = {
                     navigator.push(
                         ChatScreen(
-                            endPoint = endPoint,
+                            ip = endPoint.ip,
+                            port = endPoint.port,
                             modelName = model.modelName,
                             modelType = "exact"
                         )
@@ -155,7 +158,8 @@ private fun ModelGrid(
                 onApproxModelClick = {
                     navigator.push(
                         ChatScreen(
-                            endPoint = endPoint,
+                            ip = endPoint.ip,
+                            port = endPoint.port,
                             modelName = model.modelName,
                             modelType = "approx"
                         )

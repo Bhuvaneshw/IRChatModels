@@ -21,9 +21,10 @@ fun App() {
     IRChatAppTheme {
         Column(
             modifier = Modifier
-                .background(ThemeColors.background)
-                .fillMaxSize()
+                .background(ThemeColors.secondaryContainer)
                 .statusBarsPadding()
+                .fillMaxSize()
+                .background(ThemeColors.background)
                 .navigationBarsPadding()
                 .imePadding()
                 .displayCutoutPadding()
