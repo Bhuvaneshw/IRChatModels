@@ -1,8 +1,11 @@
 package com.acutecoder.irchat.presentation.chat
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
@@ -48,27 +51,20 @@ class ChatScreen(
         val chatMessages = viewModel.chatMessages
         val loadingState by viewModel.state.collectAsState()
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = 20.dp)
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
             Toolbar(
                 title = modelType.titleCase() + " " + modelName.titleCase(),
                 backIcon = Res.drawable.ic_back,
                 onBackClick = { navigator.pop() }
             )
 
-            Column(
+            Box(
                 modifier = Modifier
                     .widthIn(min = 200.dp, max = 1020.dp)
-                    .align(Alignment.CenterHorizontally)
             ) {
                 LazyColumn(
                     state = listState,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f),
+                    modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(20.dp),
                 ) {
                     items(chatMessages, key = { it.id }) { message ->
@@ -97,10 +93,17 @@ class ChatScreen(
                                 }
                             }
                     }
+
+                    item(key = "pickerGap") {
+                        Spacer(modifier = Modifier.height(60.dp))
+                    }
                 }
 
                 ImageSelectionBox(
                     enabled = loadingState !is ChatState.WaitingForReply,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 20.dp),
                     onSendImage = {
                         viewModel.sendMessage(
                             endPoint = ApiEndPoint(ip, port),
@@ -113,7 +116,8 @@ class ChatScreen(
                             if (chatMessages.size > 0)
                                 listState.animateScrollToItem(chatMessages.lastIndex)
                         }
-                    })
+                    }
+                )
             }
         }
     }

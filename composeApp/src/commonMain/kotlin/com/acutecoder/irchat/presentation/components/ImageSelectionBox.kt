@@ -28,7 +28,11 @@ import irchatmodels.composeapp.generated.resources.ic_send
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun ImageSelectionBox(enabled: Boolean, onSendImage: (ImageFile) -> Unit) {
+fun ImageSelectionBox(
+    enabled: Boolean,
+    modifier: Modifier = Modifier,
+    onSendImage: (ImageFile) -> Unit
+) {
     var imageFile by remember { mutableStateOf<ImageFile?>(null) }
     var showImagePicker by remember { mutableStateOf(false) }
 
@@ -43,7 +47,7 @@ fun ImageSelectionBox(enabled: Boolean, onSendImage: (ImageFile) -> Unit) {
     }
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(40.dp)
             .padding(horizontal = 20.dp)
