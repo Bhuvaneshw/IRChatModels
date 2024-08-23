@@ -25,13 +25,12 @@ actual fun ImagePicker(onPickImage: (ImageFile) -> Unit, onCancel: () -> Unit) {
         if (result == JFileChooser.APPROVE_OPTION) {
             val selectedFile: File = fileChooser.selectedFile
             scope.launchIO {
-                val inputStream = FileInputStream(selectedFile)
+                val bytes = FileInputStream(selectedFile).use { it.readBytes() }
+
                 onPickImage(
                     ImageFile(
                         name = selectedFile.name,
-                        toByteArray = {
-                            inputStream.use { it.readBytes() }
-                        }
+                        bytes = { bytes }
                     )
                 )
             }

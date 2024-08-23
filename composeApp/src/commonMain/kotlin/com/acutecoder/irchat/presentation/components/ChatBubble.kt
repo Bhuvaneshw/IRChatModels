@@ -19,21 +19,14 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import com.acutecoder.irchat.domain.model.ChatMessage
 import com.acutecoder.irchat.presentation.copyToClipboard
-import com.acutecoder.irchat.presentation.launchIO
-import com.acutecoder.irchat.presentation.toImageBitmap
 import com.acutecoder.irchat.presentation.theme.ThemeColors
+import com.acutecoder.irchat.presentation.toImageBitmap
 import irchatmodels.composeapp.generated.resources.Res
 import irchatmodels.composeapp.generated.resources.ic_copy
 import org.jetbrains.compose.resources.painterResource
@@ -70,32 +63,24 @@ fun PlainChatBubble(
 
 @Composable
 private fun UserChatBubble(message: ChatMessage.UserMessage) {
-    var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
-
-    LaunchedEffect(Unit) {
-        launchIO {
-            imageBitmap = message.loadBytes()?.toImageBitmap()
-        }
-    }
-
     PlainChatBubble(isAlignEnd = true) {
         Text(
             text = "You",
             modifier = Modifier.padding(8.dp)
         )
 
-        imageBitmap?.let {
-            Image(
-                bitmap = it,
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f)
-                    .padding(4.dp)
-                    .clip(RoundedCornerShape(16.dp))
-            )
-        } ?: LoadingBox(modifier = Modifier.padding(8.dp), size = 36.dp)
+        Image(
+            bitmap = message.imageBytes().toImageBitmap(),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f)
+                .padding(4.dp)
+                .clip(RoundedCornerShape(16.dp))
+        )
     }
+//        ?: LoadingBox(modifier = Modifier.padding(8.dp), size = 36.dp)
+//}
 }
 
 @Composable

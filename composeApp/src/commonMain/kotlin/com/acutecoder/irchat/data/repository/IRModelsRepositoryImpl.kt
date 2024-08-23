@@ -62,8 +62,7 @@ class IRModelsRepositoryImpl : IRModelsRepository {
         imageFile: ImageFile,
     ): ResultBody {
         try {
-            val imageBytes = imageFile.toByteArray()
-                ?: return ResultBody.Error("Unable to read image")
+            val imageBytes = imageFile.bytes()
 
             val response = endPoint.client.submitFormWithBinaryData(
                 url = endPoint.routePredict(),

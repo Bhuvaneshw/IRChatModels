@@ -83,7 +83,7 @@ class ChatScreen(
                                 }
                             }
                         else if (it is ChatState.WaitingForReply)
-                            item(key = viewModel.loadingId) {
+                            item {
                                 PlainChatBubble {
                                     Text(
                                         text = "Model",

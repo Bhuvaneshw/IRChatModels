@@ -28,14 +28,13 @@ actual fun ImagePicker(onPickImage: (ImageFile) -> Unit, onCancel: () -> Unit) {
                 val reader = FileReader()
                 reader.onload = {
                     val arrayBuffer = Uint8Array(reader.result as ArrayBuffer)
+                    val bytes = ByteArray(arrayBuffer.byteLength) { arrayBuffer[it] }
 
                     scope.launch {
                         onPickImage(
                             ImageFile(
                                 name = file.name,
-                                toByteArray = {
-                                    ByteArray(arrayBuffer.byteLength) { arrayBuffer[it] }
-                                }
+                                bytes = { bytes }
                             )
                         )
                     }

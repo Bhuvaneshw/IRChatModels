@@ -14,7 +14,6 @@ import com.acutecoder.irchat.presentation.components.ImageFile
 import com.acutecoder.irchat.presentation.injectInstance
 import com.acutecoder.irchat.presentation.launchIO
 import com.acutecoder.irchat.presentation.randomUUID
-import com.acutecoder.irchat.presentation.withIO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -37,14 +36,7 @@ class ChatViewModel(
         updateState { ChatState.WaitingForReply }
 
         screenModelScope.launchIO {
-            val imageStream = suspend { withIO { imageFile.toByteArray() } }
-
-            chatMessages.add(
-                ChatMessage.UserMessage(
-                    imageStream,
-                    randomUUID()
-                )
-            )
+            chatMessages.add(ChatMessage.UserMessage(imageFile.bytes, randomUUID()))
             loadingId = randomUUID()
 
             try {

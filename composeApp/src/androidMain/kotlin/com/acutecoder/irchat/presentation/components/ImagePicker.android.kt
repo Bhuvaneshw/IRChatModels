@@ -19,16 +19,19 @@ actual fun ImagePicker(onPickImage: (ImageFile) -> Unit, onCancel: () -> Unit) {
         rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
             scope.launchIO {
                 it?.let { uri ->
-                    val inputStream = context.contentResolver.openInputStream(uri)
+                    val bytes = context.contentResolver.openInputStream(uri)?.use { it.readBytes() }
+                    if (bytes == null) {
+                        onCancel()
+                        return@launchIO
+                    }
                     val fileName = context.getFileName(uri) ?: "Unknown.jpg"
 
                     onPickImage(
                         ImageFile(
                             name = fileName,
-                            toByteArray = {
-                                inputStream?.use { it.readBytes() }
-                            }
-                        ))
+                            bytes = { bytes }
+                        )
+                    )
                 } ?: onCancel()
             }
         }

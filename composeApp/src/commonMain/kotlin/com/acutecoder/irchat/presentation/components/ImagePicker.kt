@@ -7,5 +7,5 @@ expect fun ImagePicker(onPickImage: (ImageFile) -> Unit, onCancel: () -> Unit)
 
 class ImageFile(
     val name: String,
-    val toByteArray: () -> ByteArray?,
+    val bytes: () -> ByteArray,
 )
