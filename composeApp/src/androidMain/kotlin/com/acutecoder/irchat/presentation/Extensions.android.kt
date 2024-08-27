@@ -1,5 +1,6 @@
 package com.acutecoder.irchat.presentation
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -58,3 +59,8 @@ actual fun CoroutineScope.launchIO(block: suspend CoroutineScope.() -> Unit) {
 }
 
 actual fun randomUUID(): String = UUID.randomUUID().toString()
+
+actual fun finishApplication() {
+    val context = injectInstance<Context>() as Activity
+    context.finishAffinity()
+}

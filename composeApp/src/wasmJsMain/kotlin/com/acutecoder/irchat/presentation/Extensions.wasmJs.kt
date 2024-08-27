@@ -68,3 +68,7 @@ private fun randomHex(min: Int = 0, max: Int = 15): Char {
     val value = Random.nextInt(min, max + 1)
     return value.toString(16)[0]
 }
+
+actual fun finishApplication() {
+    // Not sure what to do as there is no such thing in browser!
+}

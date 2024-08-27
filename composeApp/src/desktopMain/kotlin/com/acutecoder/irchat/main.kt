@@ -1,5 +1,6 @@
 package com.acutecoder.irchat
 
+import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.acutecoder.irchat.di.initKoin
@@ -9,6 +10,8 @@ fun main() {
     initKoin()
 
     application {
+        LocalApplication = this
+
         Window(
             onCloseRequest = ::exitApplication,
             title = "IR Chat Models",
@@ -17,3 +20,6 @@ fun main() {
         }
     }
 }
+
+var LocalApplication: ApplicationScope? = null
+    private set

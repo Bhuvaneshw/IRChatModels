@@ -2,6 +2,8 @@ package com.acutecoder.irchat.presentation
 
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
+import androidx.compose.ui.window.ApplicationScope
+import com.acutecoder.irchat.LocalApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,3 +37,8 @@ actual fun CoroutineScope.launchIO(block: suspend CoroutineScope.() -> Unit) {
 }
 
 actual fun randomUUID(): String = UUID.randomUUID().toString()
+
+actual fun finishApplication() {
+    val context = LocalApplication
+    context?.exitApplication()
+}

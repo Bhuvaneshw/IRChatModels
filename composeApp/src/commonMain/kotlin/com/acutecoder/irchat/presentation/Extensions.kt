@@ -51,3 +51,5 @@ fun isIpAddress(ipAddress: String): Boolean {
 }
 
 expect fun randomUUID(): String
+
+expect fun finishApplication()

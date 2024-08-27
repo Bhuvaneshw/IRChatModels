@@ -16,26 +16,32 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import cafe.adriel.voyager.navigator.internal.BackHandler
 import com.acutecoder.irchat.domain.model.ApiEndPoint
 import com.acutecoder.irchat.domain.model.IRModel
 import com.acutecoder.irchat.presentation.chat.ChatScreen
@@ -43,24 +49,31 @@ import com.acutecoder.irchat.presentation.components.ErrorBox
 import com.acutecoder.irchat.presentation.components.IpInputBox
 import com.acutecoder.irchat.presentation.components.LoadingBox
 import com.acutecoder.irchat.presentation.components.ModelBox
+import com.acutecoder.irchat.presentation.components.SideBar
 import com.acutecoder.irchat.presentation.components.StatusText
 import com.acutecoder.irchat.presentation.components.Toolbar
 import com.acutecoder.irchat.presentation.components.ToolbarIcon
+import com.acutecoder.irchat.presentation.finishApplication
 import com.acutecoder.irchat.presentation.isIpAddress
 import com.acutecoder.irchat.presentation.theme.Dimen
 import com.acutecoder.irchat.presentation.theme.ThemeColors
 import irchatmodels.composeapp.generated.resources.Res
 import irchatmodels.composeapp.generated.resources.ic_change_ip
+import irchatmodels.composeapp.generated.resources.ic_menu
 import irchatmodels.composeapp.generated.resources.ic_refresh
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
 class HomeScreen : Screen {
 
+    @OptIn(InternalVoyagerApi::class)
     @Composable
     override fun Content() {
         var showChangeIpDialog by remember { mutableStateOf(false) }
         val viewModel = rememberScreenModel { HomeViewModel() }
         val state by viewModel.state.collectAsState()
+        val drawerState = rememberDrawerState(DrawerValue.Closed)
+        val scope = rememberCoroutineScope()
 
         LaunchedEffect(Unit) {
             if (state.ipAddress != null && !state.isConnected) {
@@ -68,55 +81,70 @@ class HomeScreen : Screen {
             }
         }
 
-        Column(modifier = Modifier.fillMaxSize()) {
-            Toolbar(
-                title = "IR Chat",
-                rightContent = {
-                    ToolbarIcon(
-                        icon = Res.drawable.ic_change_ip,
-                        onClick = { showChangeIpDialog = true }
-                    )
-                    ToolbarIcon(
-                        icon = Res.drawable.ic_refresh,
-                        onClick = { viewModel.connect() }
-                    )
-                }
-            )
-
-            StatusText(
-                status = if (state.isConnected) "Connected to ${state.ipAddress}${if (state.port.isNotBlank()) ":${state.port}" else ""}" else "Connecting...",
-                modifier = Modifier
-                    .padding(end = 12.dp)
-                    .align(Alignment.End)
-            )
-
-            when (val loadingStatus = state.loadingStatus) {
-                is LoadingStatus.Loaded -> ModelGrid(
-                    irModels = loadingStatus.irModels,
-                    endPoint = viewModel.endPoint,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-
-                is LoadingStatus.Error -> ErrorBox(
-                    error = loadingStatus.error,
-                    modifier = Modifier.fillMaxSize(),
-                    centerAlign = true,
-                    onRetry = { viewModel.connect() }
-                )
-
-                LoadingStatus.Loading -> LoadingBox(
-                    modifier = Modifier.fillMaxSize(),
-                )
-            }
+        BackHandler(true) {
+            if (drawerState.isOpen)
+                scope.launch { drawerState.close() }
+            else finishApplication()
         }
 
-        if (showChangeIpDialog || state.ipAddress == null) {
-            ChangeIpDialog(
-                ipAddress = state.ipAddress ?: "",
-                port = state.port,
-                dismiss = { showChangeIpDialog = false },
-                onChangeIp = { ip, port -> viewModel.updateIp(ip, port) }
-            )
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            drawerContent = {
+                SideBar()
+            }
+        ) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                Toolbar(
+                    title = "IR Chat",
+                    backIcon = Res.drawable.ic_menu,
+                    onBackClick = { scope.launch { drawerState.open() } },
+                    rightContent = {
+                        ToolbarIcon(
+                            icon = Res.drawable.ic_change_ip,
+                            onClick = { showChangeIpDialog = true }
+                        )
+                        ToolbarIcon(
+                            icon = Res.drawable.ic_refresh,
+                            onClick = { viewModel.connect() }
+                        )
+                    }
+                )
+
+                StatusText(
+                    status = if (state.isConnected) "Connected to ${state.ipAddress}${if (state.port.isNotBlank()) ":${state.port}" else ""}" else "Connecting...",
+                    modifier = Modifier
+                        .padding(end = 12.dp)
+                        .align(Alignment.End)
+                )
+
+                when (val loadingStatus = state.loadingStatus) {
+                    is LoadingStatus.Loaded -> ModelGrid(
+                        irModels = loadingStatus.irModels,
+                        endPoint = viewModel.endPoint,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+
+                    is LoadingStatus.Error -> ErrorBox(
+                        error = loadingStatus.error,
+                        modifier = Modifier.fillMaxSize(),
+                        centerAlign = true,
+                        onRetry = { viewModel.connect() }
+                    )
+
+                    LoadingStatus.Loading -> LoadingBox(
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
+            }
+
+            if (showChangeIpDialog || state.ipAddress == null) {
+                ChangeIpDialog(
+                    ipAddress = state.ipAddress ?: "",
+                    port = state.port,
+                    dismiss = { showChangeIpDialog = false },
+                    onChangeIp = { ip, port -> viewModel.updateIp(ip, port) }
+                )
+            }
         }
     }
 }
@@ -246,7 +274,6 @@ private fun ChangeIpDialog(
                 style = MaterialTheme.typography.bodyMedium,
                 color = ThemeColors.primary
             )
-
         }
     }
 }
