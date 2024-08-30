@@ -23,11 +23,11 @@ fun App() {
             modifier = Modifier
                 .background(ThemeColors.secondaryContainer)
                 .statusBarsPadding()
+                .displayCutoutPadding()
                 .fillMaxSize()
                 .background(ThemeColors.background)
                 .navigationBarsPadding()
                 .imePadding()
-                .displayCutoutPadding()
         ) {
             Navigator(HomeScreen())
         }

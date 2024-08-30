@@ -1,5 +1,6 @@
 package com.acutecoder.irchat.presentation.components
 
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -8,11 +9,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.acutecoder.irchat.presentation.theme.ThemeColors
 
 @Composable
-fun SideBar() {
-    ModalDrawerSheet {
-        LazyColumn {
+fun SideBar(modifier: Modifier = Modifier) {
+    ModalDrawerSheet(drawerContainerColor = ThemeColors.secondaryContainer, modifier = modifier) {
+        LazyColumn(
+            modifier = Modifier.fillMaxHeight().padding(16.dp)
+        ) {
             textItem("About the project")
             textItem(
                 " Team Members & Roles:\n" + "\n" +
@@ -23,7 +27,8 @@ fun SideBar() {
             )
             textItem(
                 "Project Overview: ImageRecognizer is a multiplatform application designed to recognize images using a Convolutional Neural Network (CNN). The project is developed in a collaborative environment, with each team member responsible for specific tasks.\n" +
-                        "\n")
+                        "\n"
+            )
             textItem(
                 "Frontend: As the frontend developer, your responsibility is to design and implement the user interface in Android Kotlin Multiplatform. The focus is on creating an intuitive and responsive design that integrates seamlessly with the backend and the data processing pipeline.\n" +
                         "\n" +
@@ -36,7 +41,9 @@ fun SideBar() {
             )
 
         }
+
     }
+
 }
 
 private fun LazyListScope.textItem(text: String) {
