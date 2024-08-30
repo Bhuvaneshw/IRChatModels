@@ -48,6 +48,6 @@ fun SideBar(modifier: Modifier = Modifier) {
 
 private fun LazyListScope.textItem(text: String) {
     item {
-        Text(text = text, modifier = Modifier.padding(5.dp))
+        Text(text = text, modifier = Modifier.padding(5.dp), color = ThemeColors.dark)
     }
 }

@@ -68,7 +68,8 @@ fun ImageSelectionBox(
                 modifier = Modifier
                     .fillMaxHeight()
                     .aspectRatio(1f)
-                    .padding(10.dp)
+                    .padding(10.dp),
+                tint= ThemeColors.dark
             )
 
             Text(
@@ -91,7 +92,7 @@ fun ImageSelectionBox(
                     imageFile = null
                 }
                 .padding(10.dp),
-            tint = ThemeColors.white,
+            tint = ThemeColors.light,
         )
     }
 }

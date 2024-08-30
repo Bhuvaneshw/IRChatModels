@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.acutecoder.irchat.presentation.theme.ThemeColors
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
@@ -22,6 +23,7 @@ fun ToolbarIcon(icon: DrawableResource, onClick: () -> Unit) {
             .size(45.dp)
             .clip(CircleShape)
             .clickable(onClick = onClick)
-            .padding(10.dp)
+            .padding(10.dp),
+        tint = ThemeColors.dark,
     )
 }

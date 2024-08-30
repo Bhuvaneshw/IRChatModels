@@ -66,7 +66,8 @@ private fun UserChatBubble(message: ChatMessage.UserMessage) {
     PlainChatBubble(isAlignEnd = true) {
         Text(
             text = "You",
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
+            color = ThemeColors.dark
         )
 
         Image(
@@ -91,7 +92,8 @@ private fun ModelChatBubble(message: ChatMessage.ModelMessage) {
     ) {
         Text(
             text = "Model",
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
+            color = ThemeColors.dark
         )
 
         SelectionContainer {
@@ -99,6 +101,7 @@ private fun ModelChatBubble(message: ChatMessage.ModelMessage) {
                 text = message.result,
                 modifier = Modifier
                     .padding(horizontal = 16.dp),
+                color = ThemeColors.dark
             )
         }
 
@@ -113,7 +116,8 @@ private fun ModelChatBubble(message: ChatMessage.ModelMessage) {
                 .clickable {
                     copyToClipboard(message.result)
                 }
-                .padding(8.dp)
+                .padding(8.dp) ,
+            tint = ThemeColors.dark
         )
     }
 }

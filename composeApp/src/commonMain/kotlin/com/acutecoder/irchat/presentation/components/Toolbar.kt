@@ -46,7 +46,8 @@ fun Toolbar(
                     .clickable(enabled = onBackClick != null) {
                         onBackClick?.invoke()
                     }
-                    .padding(10.dp)
+                    .padding(10.dp),
+                tint = ThemeColors.dark,
             )
         }
 
@@ -56,7 +57,8 @@ fun Toolbar(
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
                 .padding(vertical = 14.dp, horizontal = if (backIcon != null) 7.dp else 14.dp)
-                .weight(1f)
+                .weight(1f),
+            color = ThemeColors.dark,
         )
 
         rightContent?.invoke()

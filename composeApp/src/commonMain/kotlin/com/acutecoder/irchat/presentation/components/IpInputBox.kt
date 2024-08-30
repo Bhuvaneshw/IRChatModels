@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
@@ -35,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.acutecoder.irchat.presentation.ifThen
 import com.acutecoder.irchat.presentation.isDigitsOnly
+import com.acutecoder.irchat.presentation.theme.ThemeColors
 import com.acutecoder.irchat.presentation.tryRun
 
 @Composable
@@ -171,7 +171,7 @@ private inline fun rememberTextFieldValue(text: String) =
 
 @Composable
 private fun Dot(text: String = ".") {
-    Text(text = text, modifier = Modifier.padding(2.dp))
+    Text(text = text, modifier = Modifier.padding(2.dp), color = ThemeColors.dark)
 }
 
 private fun String.ipSplit(partIndex: Int): String {
@@ -204,14 +204,15 @@ private fun IpPartInputField(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         textStyle = LocalTextStyle.current.copy(
             textAlign = TextAlign.Center,
-            fontSize = 18.sp
+            fontSize = 18.sp,
+            color = ThemeColors.dark,
         ),
         singleLine = true,
         decorationBox = {
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
-                    .border(1.dp, Color.Black, RoundedCornerShape(8.dp))
+                    .border(1.dp, color = ThemeColors.dark, RoundedCornerShape(8.dp))
                     .padding(12.dp),
                 contentAlignment = Alignment.Center,
                 content = { it() }

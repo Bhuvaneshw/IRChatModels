@@ -220,12 +220,13 @@ private fun ChangeIpDialog(
         ) {
             Row(
                 modifier = Modifier.padding(bottom = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = "Enter Ip Address",
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    color = ThemeColors.dark
                 )
 
                 Icon(
@@ -235,7 +236,8 @@ private fun ChangeIpDialog(
                         .size(38.dp)
                         .clip(CircleShape)
                         .clickable { isEditingPlainAddress = !isEditingPlainAddress }
-                        .padding(8.dp)
+                        .padding(8.dp),
+                    tint = ThemeColors.dark
                 )
             }
 

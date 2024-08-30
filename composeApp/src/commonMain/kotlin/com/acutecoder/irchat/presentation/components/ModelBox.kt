@@ -102,14 +102,16 @@ private fun InfoBox(moreInfo: String) {
             ) {
                 Text(
                     text = "Model Info",
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    color = ThemeColors.dark
                 )
 
                 Text(
                     text = moreInfo,
                     modifier = Modifier
                         .padding(top = 4.dp)
-                        .padding(horizontal = 8.dp)
+                        .padding(horizontal = 8.dp),
+                    color = ThemeColors.dark
                 )
 
                 Text(
@@ -141,9 +143,14 @@ private fun RowScope.ModelTitle(title: String, subTitle: String) {
             modifier = Modifier
                 .padding(bottom = 2.dp),
             fontWeight = FontWeight.SemiBold,
+            color = ThemeColors.dark
         )
 
-        Text(text = subTitle)
+        Text(
+            text = subTitle,
+            color = ThemeColors.dark,
+            style = MaterialTheme.typography.labelSmall
+        )
     }
 }
 
@@ -166,7 +173,7 @@ private fun ColumnScope.ModelButtons(
                 .clickable(onClick = onExactModelClick)
                 .padding(12.dp),
             textAlign = TextAlign.Center,
-            color = ThemeColors.white,
+            color = ThemeColors.light,
         )
 
         Spacer(modifier = Modifier.width(2.dp))
@@ -180,7 +187,7 @@ private fun ColumnScope.ModelButtons(
                 .clickable(onClick = onApproxModelClick)
                 .padding(12.dp),
             textAlign = TextAlign.Center,
-            color = ThemeColors.white,
+            color = ThemeColors.light,
         )
 
     }
@@ -197,7 +204,7 @@ private fun IconBox(iconText: String, iconBg: Color) {
     ) {
         Text(
             text = iconText,
-            color = ThemeColors.white,
+            color = ThemeColors.light,
         )
     }
 }
