@@ -41,7 +41,6 @@ class ChatScreen(
     private val modelName: String,
     private val modelType: String,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -51,7 +50,7 @@ class ChatScreen(
         val chatMessages = viewModel.chatMessages
         val loadingState by viewModel.state.collectAsState()
 
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
             Toolbar(
                 title = modelType.titleCase() + " " + modelName.titleCase(),
                 backIcon = Res.drawable.ic_back,
@@ -113,7 +112,7 @@ class ChatScreen(
                         )
 
                         scope.launch {
-                            if (chatMessages.size > 0)
+                            if (chatMessages.isNotEmpty())
                                 listState.animateScrollToItem(chatMessages.lastIndex)
                         }
                     }
