@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.acutecoder.irchat.presentation.theme.ThemeColors
@@ -143,7 +144,9 @@ private fun RowScope.ModelTitle(title: String, subTitle: String) {
             modifier = Modifier
                 .padding(bottom = 2.dp),
             fontWeight = FontWeight.SemiBold,
-            color = ThemeColors.dark
+            color = ThemeColors.dark,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
 
         Text(
